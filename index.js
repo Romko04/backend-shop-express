@@ -1,9 +1,27 @@
-const http = require('http')
+require('dotenv').config()
+const sequelize = require('./db')
 
-const server = http.createServer((req, res)=>{
-    console.log("Create first server");
-})
+const express = require('express')
 
-server.listen(300,()=>{
-    console.log('Create first server');
+const app = express()
+
+
+const PORT = process.env.PORT || 3000
+
+
+const connect = async () => {
+  try {
+    app.listen(PORT)
+    await sequelize.authenticate();
+    await sequelize.sync()
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  }
+}
+
+connect()
+
+
+app.get('/', function (req, res) {
+  res.send('Hello World')
 })
