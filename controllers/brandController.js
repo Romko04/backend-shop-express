@@ -1,24 +1,17 @@
 const { Brand } = require('../db')
+const errorApi = require('../error/errorApi')
+
 
 class BrandController {
-
-    async create(req, res) {
-        try {
+        async create(req, res, next) {
             const { name } = req.body
-            if (name) {
-                const brand = await Brand.create({
-                    name
-                })
-                res.status(200).json({
-                    brand
-                })
-            } else {
-                res.send('Ви не вказали ім\`я')
-            }
-        } catch (error) {
-            res.send(error)
+            const brand = await Brand.create({
+                name
+            })
+            res.status(200).json({
+                brand
+            })
         }
-    }
 
     async getAll(req, res) {
         try {
@@ -32,55 +25,34 @@ class BrandController {
     }
 
     async findBrand(req, res) {
-        try {
-            const { id } = req.params
-            if (id) {
-                const brand = await Brand.findOne({ where: { id } })
-                res.status(200).json({
-                    brand
-                })
-            } else {
-                res.send('Ви не вказали id')
-            }
-        } catch (error) {
-            res.send(error)
-        }
+        const { id } = req.params
+        const brand = await Brand.findOne({ where: { id } })
+        res.status(200).json({
+            brand
+        })
     }
 
     async DeleteBrand(req, res) {
-        try {
-            const { id } = req.params
-            if (id) {
-                const brand = await Brand.destroy({ where: { id } })
-                res.status(200).json({
-                    succes: true
-                })
-            } else {
-                res.send('Ви не вказали id')
-            }
-        } catch (error) {
-            res.send(error)
-        }
+        const { id } = req.params
+
+        await Brand.destroy({ where: { id } })
+        res.status(200).json({
+            succes: true
+        })
+
     }
 
-    async updateBrand(req, res) {
-        try {
-            const { id } = req.params
-            const { name } = req.body
+    async updateBrand(req, res, next) {
+        const { id } = req.params
+        const { name } = req.body
 
-            if (id || name) {
+        if (!name || !id) return next(errorApi.badRequest('Поля "id" та "name" Обов\`язкові'))
 
-                await Brand.update({ name }, { where: { id } })
-                res.status(200).json({
-                    succes: true
-                })
+        await Brand.update({ name }, { where: { id } })
+        res.status(200).json({
+            succes: true
+        })
 
-            } else {
-                res.send('Ви не вказали id або name')
-            }
-        } catch (error) {
-            res.send(error)
-        }
     }
 }
 

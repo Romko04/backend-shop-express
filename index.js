@@ -1,12 +1,26 @@
 require('dotenv').config()
-const sequelize = require('./db')
+require('dotenv')
 
+const {sequelize} = require('./db')
+const router = require('./routes/index')
+const cors = require('cors')
 const express = require('express')
+const errorMiddleware = require('./middleware/errorMiddleware')
 
 const app = express()
 
+app.use(cors())
+app.use(express.json())
+app.use('/api', router) // Добавляю префікс, тепер всі роути будуть починатись з префікса /api/
+
+app.use(errorMiddleware) //middleware для обробки помилок
+
+
+
 
 const PORT = process.env.PORT || 3000
+
+
 
 
 const connect = async () => {
@@ -21,7 +35,7 @@ const connect = async () => {
 
 connect()
 
-
 app.get('/', function (req, res) {
-  res.send('Hello World')
+    res.send('succes')
 })
+
