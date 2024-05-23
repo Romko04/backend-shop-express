@@ -39,7 +39,7 @@ const Product = sequelize.define(
       primaryKey: true,
     },
     name: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     price: {
@@ -138,7 +138,8 @@ const Brand = sequelize.define(
     },
     name: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      unique: true
     }
   }
 )
@@ -168,26 +169,21 @@ Rating.belongsTo(Rating)
 Basket.hasMany(BasketProduct)
 BasketProduct.belongsTo(Basket)
 
-BasketProduct.hasOne(Product)
-Product.belongsTo(BasketProduct)
+// BasketProduct.hasOne(Product)
+// Product.belongsTo(BasketProduct)
 
 Product.hasMany(ProductInfo)
 ProductInfo.belongsTo(Product)
 
-Product.hasMany(BasketProduct)
-ProductInfo.belongsTo(Product)
-
-Product.hasMany(BasketProduct)
-BasketProduct.belongsTo(Product)
 
 Type.hasMany(Product)
 Product.belongsTo(Type)
 
 Brand.hasMany(Product)
-Product.belongsTo(Brand)
+Product.belongsTo(Brand,)
 
 Type.belongsToMany(Brand, {through: TypeBrand})
 Brand.belongsToMany(Type, {through: TypeBrand})
 
 
-module.exports = sequelize
+module.exports = {sequelize, Product, Basket, BasketProduct, Brand, Type, ProductInfo, Rating, User}

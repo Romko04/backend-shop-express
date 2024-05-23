@@ -3,25 +3,21 @@ const errorApi = require('../error/errorApi')
 
 
 class BrandController {
-        async create(req, res, next) {
-            const { name } = req.body
-            const brand = await Brand.create({
-                name
-            })
-            res.status(200).json({
-                brand
-            })
-        }
+    async create(req, res, next) {
+        const { name } = req.body
+        const brand = await Brand.create({
+            name
+        })
+        res.status(200).json({
+            brand
+        })
+    }
 
     async getAll(req, res) {
-        try {
-            const brands = await Brand.findAll()
-            res.status(200).json({
-                brands
-            })
-        } catch (error) {
-            res.send(error)
-        }
+        const brands = await Brand.findAll()
+        res.status(200).json({
+            brands
+        })
     }
 
     async findBrand(req, res) {

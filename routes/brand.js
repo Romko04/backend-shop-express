@@ -5,9 +5,9 @@ const brandController = require("../controllers/brandController");
 const router = new Router()
 
 
-router.post('/:id', brandController.create)
+router.post('/', brandController.create)
 
-router.get('', brandController.getAll)
+router.get('/', brandController.getAll)
 
 router.get('/:id', brandController.findBrand)
 
