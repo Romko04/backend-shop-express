@@ -22,17 +22,29 @@ class ProductController {
 
     async getAll(req, res, next) {
         try {
-            const Products = await Product.findAll({
-                attributes: {
-                    exclude: ['createdAt', 'updatedAt'],
-                },
-                include: [{
-                    model: Brand, // Додаємо модель Brand до запиту
-                    attributes: ['name'] // Вибираємо лише поле name з таблиці Brand
-                }]
-            })
+            let { brandId, typeId, limit, page } = req.query
+            limit = limit || 5
+            page = page || 1
+            const offset = limit * page - limit
 
-            res.status(200).json(Products)
+            const where = {}
+            if (brandId) where.brandId = brandId
+            if (typeId) where.typeId = typeId
+
+            const products = await Product.findAndCountAll({
+                attributes: { exclude: ['createdAt', 'updatedAt'] },
+                include: [{
+                    model: Brand,
+                    attributes: ['name']
+                }],
+                where,
+                limit,
+                offset,
+            })
+            
+            products
+                ? res.status(200).json({ products })
+                : next(errorApi.badRequest("Product not found"))
         } catch (error) {
             next(errorApi.badRequest(error.message))
         }
@@ -81,8 +93,8 @@ class ProductController {
             const { name, price, rating, image: fileName, typeId, brandId } = req.body
             const product = await Product.update({ name, price, rating, image: fileName, typeId, brandId }, { where: { id } })
             product
-            ? res.status(200).json({ succes: true })
-            : next(errorApi.badRequest("Product not found"))
+                ? res.status(200).json({ succes: true })
+                : next(errorApi.badRequest("Product not found"))
         } catch (error) {
             next(errorApi.badRequest(error.message))
         }
