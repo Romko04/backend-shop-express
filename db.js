@@ -16,15 +16,34 @@ const User = sequelize.define(
     },
     firstName: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     lastName: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     email: {
       type: DataTypes.STRING,
       unique: true,
+      allowNull: false,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+  }
+)
+
+const UserRefreshToken = sequelize.define(
+  'user_refresh_token',
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    token: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
   }
@@ -162,6 +181,10 @@ const TypeBrand = sequelize.define(
 
 User.hasOne(Basket)
 Basket.belongsTo(User)
+
+User.hasOne(UserRefreshToken)
+UserRefreshToken.belongsTo(User)
+
 
 User.hasMany(Rating)
 Rating.belongsTo(Rating)
