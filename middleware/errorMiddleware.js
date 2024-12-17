@@ -5,6 +5,6 @@ module.exports = (error, req, res, next) => {
         return res.status(error.status).json({message: error.message})
     }
 
-    return res.status('500').json({message: 'Непередбачувана помилка'})
+    return res.status('500').json({message: error.message})
 
 }

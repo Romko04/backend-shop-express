@@ -4,8 +4,11 @@ class ErrorApi extends Error {
         this.status = status
         this.message = message
     }
-    static badRequest(message){
+    static notFoundRequest(message){
         return new ErrorApi('404', message)
+    }
+    static badRequest(message){
+        return new ErrorApi('400', message)
     }
 }
 

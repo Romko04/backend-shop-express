@@ -1,18 +1,18 @@
 const uuid = require('uuid')
 const path = require('path');
-const { Product, Brand } = require('../db')
+const { Product, Category } = require('../db')
 const errorApi = require('../error/errorApi')
 
 
 class ProductController {
     async create(req, res, next) {
         try {
-            const { name, price, rating, typeId, brandId } = req.body
+            const { name, price, categoryId} = req.body
             const { img } = req.files
             let fileName = uuid.v4() + ".jpg"
             img.mv(path.resolve(__dirname, '..', 'static', fileName))
             const product = await Product.create({
-                name, price, rating, image: fileName, typeId, brandId
+                name, price, image: fileName, categoryId, 
             })
             return res.json(product)
         } catch (error) {
@@ -22,19 +22,18 @@ class ProductController {
 
     async getAll(req, res, next) {
         try {
-            let { brandId, typeId, limit, page } = req.query
+            let { categoryId, limit, page } = req.query
             limit = limit || 5
             page = page || 1
             const offset = limit * page - limit
 
             const where = {}
-            if (brandId) where.brandId = brandId
-            if (typeId) where.typeId = typeId
+            if (categoryId) where.categoryId = categoryId
 
             const products = await Product.findAndCountAll({
                 attributes: { exclude: ['createdAt', 'updatedAt'] },
                 include: [{
-                    model: Brand,
+                    model: Category,
                     attributes: ['name']
                 }],
                 where,
@@ -44,9 +43,9 @@ class ProductController {
             
             products
                 ? res.status(200).json({ products })
-                : next(errorApi.badRequest("Product not found"))
+                : next(errorApi.notFoundRequest("Product not found"))
         } catch (error) {
-            next(errorApi.badRequest(error.message))
+            next(errorApi.notFoundRequest(error.message))
         }
     }
 
@@ -59,17 +58,17 @@ class ProductController {
                     exclude: ['createdAt', 'updatedAt'],
                 },
                 include: [{
-                    model: Brand,
+                    model: Category,
                     attributes: ['name']
                 }]
             })
 
             product
                 ? res.status(200).json({ product })
-                : next(errorApi.badRequest("Product not found"))
+                : next(errorApi.notFoundRequest("Product not found"))
 
         } catch (error) {
-            next(errorApi.badRequest(error.message))
+            next(errorApi.notFoundRequest(error.message))
         }
     }
 
@@ -80,7 +79,7 @@ class ProductController {
             const product = await Product.destroy({ where: { id } })
             product
                 ? res.status(200).json({ succes: true })
-                : next(errorApi.badRequest("Product not found"))
+                : next(errorApi.notFoundRequest("Product not found"))
 
         } catch (error) {
             next(errorApi.badRequest(error.message))
@@ -94,7 +93,7 @@ class ProductController {
             const product = await Product.update({ name, price, rating, image: fileName, typeId, brandId }, { where: { id } })
             product
                 ? res.status(200).json({ succes: true })
-                : next(errorApi.badRequest("Product not found"))
+                : next(errorApi.notFoundRequest("Product not found"))
         } catch (error) {
             next(errorApi.badRequest(error.message))
         }

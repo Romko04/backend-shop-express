@@ -67,7 +67,7 @@ const Product = sequelize.define(
     },
     rating: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     image: {
       type: DataTypes.STRING,
@@ -124,6 +124,7 @@ const Rating = sequelize.define(
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
+      defaultValue: 0
     },
     rate: {
       type: DataTypes.INTEGER,
@@ -132,39 +133,8 @@ const Rating = sequelize.define(
   }
 )
 
-const Type = sequelize.define(
-  'type',
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false
-    }
-  }
-)
-
-const Brand = sequelize.define(
-  'brand',
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true
-    }
-  }
-)
-
-const TypeBrand = sequelize.define(
-  'type_brand',
+const Category = sequelize.define(
+  'categories',
   {
     id: {
       type: DataTypes.INTEGER,
@@ -199,14 +169,8 @@ Product.hasMany(ProductInfo)
 ProductInfo.belongsTo(Product)
 
 
-Type.hasMany(Product)
-Product.belongsTo(Type)
-
-Brand.hasMany(Product)
-Product.belongsTo(Brand,)
-
-Type.belongsToMany(Brand, {through: TypeBrand})
-Brand.belongsToMany(Type, {through: TypeBrand})
+Category.hasMany(Product)
+Product.belongsTo(Category)
 
 
-module.exports = {sequelize, Product, Basket, BasketProduct, Brand, Type, ProductInfo, Rating, User}
+module.exports = {sequelize, Product, Basket, BasketProduct, Category, ProductInfo, Rating, User}
