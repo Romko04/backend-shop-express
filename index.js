@@ -6,7 +6,7 @@ const path = require('path')
 const router = require('./routes/index')
 const cors = require('cors')
 const express = require('express')
-const errorMiddleware = require('./middleware/errorMiddleware')
+const errorMiddleware = require('./middleware/error/errorHandler')
 
 const app = express()
 

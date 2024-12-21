@@ -1,4 +1,4 @@
-const errorApi = require('../error/errorApi')
+const errorApi = require('../../error/errorApi')
 
 const validateImages = (req, res, next) => {
     if (!req.files || !req.files.img || req.files.img.length === 0) {

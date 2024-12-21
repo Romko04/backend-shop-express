@@ -2,7 +2,7 @@ const errorApi = require('../error/errorApi')
 const { query, validationResult } = require('express-validator');
 
 
-const productMiddleware = (req, res, next) => {
+const validateMiddleware = (req, res, next) => {
 
     const result = validationResult(req);
 
@@ -14,4 +14,4 @@ const productMiddleware = (req, res, next) => {
 
 }
 
-module.exports = productMiddleware
+module.exports = validateMiddleware

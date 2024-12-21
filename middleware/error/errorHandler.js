@@ -1,4 +1,4 @@
-const ErrorApi = require('../error/errorApi')
+const ErrorApi = require('../../error/errorApi')
 
 module.exports = (error, req, res, next) => {
     if (error instanceof ErrorApi) {

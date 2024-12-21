@@ -7,7 +7,6 @@ class UserController {
     async create(req, res, next) {
         try {
             const { password, email, firstName, lastName } = req.body
-            if (!password || !email) return next(errorApi.badRequest('Email and password is required'))
             const hashPassword = await bcrypt.hash(password, 4)
             const newUser = await User.create({ password: hashPassword, email, firstName, lastName})
             res.json({succes:true})
