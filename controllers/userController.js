@@ -8,10 +8,30 @@ class UserController {
         try {
             const { password, email, firstName, lastName } = req.body
             const hashPassword = await bcrypt.hash(password, 4)
-            const newUser = await User.create({ password: hashPassword, email, firstName, lastName})
-            res.json({succes:true})
+            await User.create({ password: hashPassword, email, firstName, lastName })
+            res.json({ succes: true })
         } catch (error) {
-             next(errorApi.badRequest(error.message))
+            next(errorApi.badRequest(error.message))
+        }
+
+    }
+
+    async auth(req, res, next) {
+
+        try {
+            const { password, email } = req.body
+            const user = await User.findOne({ where: { email } })
+            const passwordHash = user.password;
+            
+            bcrypt.compare(password, passwordHash, function (err, result) {
+                if (result) {
+                    res.json({ succes: true })
+                } else {
+                    next(errorApi.badRequest('Password or email incorrect'))
+                }
+            });
+        } catch (error) {
+            next(errorApi.badRequest(error.message))
         }
 
     }

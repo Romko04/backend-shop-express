@@ -6,6 +6,21 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, pr
 });
 
 
+const Role = sequelize.define('role', {
+  id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+  },
+  name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+  },
+}, {
+  tableName: 'roles',
+});
+
 const User = sequelize.define(
   'user',
   {
@@ -22,6 +37,7 @@ const User = sequelize.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
+
     email: {
       type: DataTypes.STRING,
       unique: true,
@@ -149,6 +165,7 @@ const Category = sequelize.define(
 )
 
 
+
 User.hasOne(Basket)
 Basket.belongsTo(User)
 
@@ -173,4 +190,4 @@ Category.hasMany(Product)
 Product.belongsTo(Category)
 
 
-module.exports = {sequelize, Product, Basket, BasketProduct, Category, ProductInfo, Rating, User}
+module.exports = {sequelize, Product, Basket, BasketProduct, Category, ProductInfo, Rating, User, Role}

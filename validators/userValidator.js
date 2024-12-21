@@ -24,4 +24,15 @@ const userRegistrationValidationRules = [
         .withMessage('Not valid email')
 ];
 
-module.exports = userRegistrationValidationRules;
+const UserExistsValidationRules = [
+    body('email')
+        .notEmpty()
+        .withMessage('Email is required')
+        .isEmail()
+        .withMessage('Not valid email'),
+    body('password')
+        .notEmpty()
+        .withMessage('Password is required')
+]
+
+module.exports = {userRegistrationValidationRules, UserExistsValidationRules};
