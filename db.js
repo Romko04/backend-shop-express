@@ -37,7 +37,14 @@ const User = sequelize.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
-
+    roleId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: Role,
+        key: 'id',
+      },
+      allowNull: false,
+    },
     email: {
       type: DataTypes.STRING,
       unique: true,
@@ -164,8 +171,6 @@ const Category = sequelize.define(
   }
 )
 
-
-
 User.hasOne(Basket)
 Basket.belongsTo(User)
 
@@ -179,8 +184,6 @@ Rating.belongsTo(Rating)
 Basket.hasMany(BasketProduct)
 BasketProduct.belongsTo(Basket)
 
-// BasketProduct.hasOne(Product)
-// Product.belongsTo(BasketProduct)
 
 Product.hasMany(ProductInfo)
 ProductInfo.belongsTo(Product)

@@ -11,7 +11,7 @@ const router = new Router()
 
 
 router.post('', userRegistrationValidationRules, validateMiddleware, userController.create)
-router.post('/auth', UserExistsValidationRules, validateMiddleware, checkUserExists, userController.auth)
+router.post('/login', UserExistsValidationRules, validateMiddleware, checkUserExists, userController.login)
 
 
 

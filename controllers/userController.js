@@ -1,6 +1,8 @@
 const { User } = require('../db')
 const bcrypt = require('bcrypt');
 const errorApi = require('../error/errorApi')
+const token = require('../services/token')
+
 
 
 class UserController {
@@ -16,7 +18,7 @@ class UserController {
 
     }
 
-    async auth(req, res, next) {
+    async login(req, res, next) {
 
         try {
             const { password, email } = req.body
@@ -25,11 +27,15 @@ class UserController {
             
             bcrypt.compare(password, passwordHash, function (err, result) {
                 if (result) {
-                    res.json({ succes: true })
+                    const payload = {email, id: user.id, roleId: user.roleId}
+                    const generatedToken = token.generate(payload)
+
+                    res.json({ succes: true, generatedToken})
                 } else {
                     next(errorApi.badRequest('Password or email incorrect'))
                 }
             });
+            
         } catch (error) {
             next(errorApi.badRequest(error.message))
         }
