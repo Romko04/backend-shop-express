@@ -18,6 +18,10 @@ class ErrorApi extends Error {
         return new ErrorApi(403, message);
     }
 
+    static internalServerError(message) {
+        return new ErrorApi(500, message);
+    }
+
 }
 
 module.exports = ErrorApi

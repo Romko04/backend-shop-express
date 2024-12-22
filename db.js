@@ -125,6 +125,26 @@ const BasketProduct = sequelize.define(
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
+    },
+    basketId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'baskets',
+        key: 'id',
+      },
+    },
+    productId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'products',
+        key: 'id',
+      }
+    },
+    count: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
     }
   }
 )
@@ -184,6 +204,8 @@ Rating.belongsTo(Rating)
 Basket.hasMany(BasketProduct)
 BasketProduct.belongsTo(Basket)
 
+BasketProduct.hasMany(Product)
+Product.belongsTo(BasketProduct)
 
 Product.hasMany(ProductInfo)
 ProductInfo.belongsTo(Product)

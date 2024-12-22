@@ -20,7 +20,7 @@ app.use(errorMiddleware) //middleware для обробки помилок
 
 
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3001
 
 const connect = async () => {
   try {

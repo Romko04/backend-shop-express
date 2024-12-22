@@ -3,7 +3,7 @@ const errorApi = require('../../error/errorApi')
 
 
 const checkUserExists = async (req, res, next) => {
-    const {email} = req.body
+    const email = req.body.email || req.user?.email;
 
     const user = await User.findOne({where: {email}})
 
