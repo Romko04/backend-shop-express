@@ -7,13 +7,15 @@ const cartRouter = require('./cart')
 
 const checkAuth = require('../middleware/auth/checkAuth')
 const checkUserExists = require('../middleware/auth/checkUserExists')
+const findBasket = require('../middleware/cart/findBasket');
+
 
 
 
 router.use('/brands', brandRouter) // розділяю маршрути на їх логічні частини
 router.use('/product', productRouter) 
 router.use('/user', userRouter) 
-router.use('/cart', checkAuth, checkUserExists, cartRouter);
+router.use('/cart', checkAuth, checkUserExists, findBasket, cartRouter);
 
 
 

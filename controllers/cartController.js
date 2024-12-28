@@ -1,10 +1,12 @@
+const { where } = require('sequelize');
 const { Basket, BasketProduct, Product } = require('../db');
 const errorApi = require('../error/errorApi');
 
 class CartController {
     async add(req, res, next) {
         try {
-            const { productId, quantity } = req.body;
+            const { productId } = req.params;
+            const { quantity } = req.body;
             const userId = req.user.id;
 
             let basket = await Basket.findOne({ where: { userId } });
@@ -29,21 +31,12 @@ class CartController {
 
     async remove(req, res, next) {
         try {
-            const { productId } = req.body;
-            const userId = req.user.id;
 
-            const basket = await Basket.findOne({ where: { userId } });
-            if (!basket) {
-                return next(errorApi.notFoundRequest('Basket not found'));
-            }
-
-            const basketProduct = await BasketProduct.findOne({ where: { basketId: basket.id, productId } });
-            if (!basketProduct) {
-                return next(errorApi.notFoundRequest('Product not found in basket'));
-            }
+            let basketProduct = req.basketProduct;
 
             await basketProduct.destroy();
             res.json({ success: true });
+            
         } catch (error) {
             next(errorApi.internalServerError(error.message));
         }
@@ -51,18 +44,9 @@ class CartController {
 
     async edit(req, res, next) {
         try {
-            const { productId, quantity } = req.body;
-            const userId = req.user.id;
+            const {quantity } = req.body;
 
-            const basket = await Basket.findOne({ where: { userId } });
-            if (!basket) {
-                return next(errorApi.notFoundRequest('Basket not found'));
-            }
-
-            const basketProduct = await BasketProduct.findOne({ where: { basketId: basket.id, productId } });
-            if (!basketProduct) {
-                return next(errorApi.notFoundRequest('Product not found in basket'));
-            }
+            let basketProduct = req.basketProduct;
 
             basketProduct.count = quantity;
             await basketProduct.save();
@@ -100,12 +84,8 @@ class CartController {
 
     async clear(req, res, next) {
         try {
-            const userId = req.user.id;
 
-            const basket = await Basket.findOne({ where: { userId } });
-            if (!basket) {
-                return next(errorApi.notFoundRequest('Basket not found'));
-            }
+            const basket = req.basket;
 
             await BasketProduct.destroy({ where: { basketId: basket.id } });
             res.json({ success: true });

@@ -204,15 +204,13 @@ Rating.belongsTo(Rating)
 Basket.hasMany(BasketProduct)
 BasketProduct.belongsTo(Basket)
 
-BasketProduct.hasMany(Product)
-Product.belongsTo(BasketProduct)
-
-Product.hasMany(ProductInfo)
-ProductInfo.belongsTo(Product)
+BasketProduct.belongsTo(Product)
+Product.hasMany(BasketProduct)
 
 
 Category.hasMany(Product)
 Product.belongsTo(Category)
+
 
 
 module.exports = {sequelize, Product, Basket, BasketProduct, Category, ProductInfo, Rating, User, Role}
