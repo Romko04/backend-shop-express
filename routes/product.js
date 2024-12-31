@@ -19,7 +19,7 @@ router.get('/:id', productController.findProduct)
 
 router.put('/:id', checkAuth, сheckRole([2]), productValidationRules, validateMiddleware, validateImages, productController.updateProduct)
 
-router.delete('/:id', сheckRole([2]), productController.deleteProduct)
+router.delete('/:id',checkAuth, сheckRole([2]), productController.deleteProduct)
 
 
 

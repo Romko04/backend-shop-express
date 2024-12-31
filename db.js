@@ -2,7 +2,8 @@ const { Sequelize, DataTypes } = require('sequelize');
 
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
   host: 'localhost',
-  dialect: 'postgres'
+  dialect: 'postgres',
+  logging: false,
 });
 
 
@@ -98,6 +99,102 @@ const Product = sequelize.define(
     },
   }
 )
+
+const DeliveryMethod = sequelize.define(
+  'delivery_method',
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+  }
+)
+
+const PaymentMethod = sequelize.define(
+  'payment_method',
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+  }
+)
+
+const Order = sequelize.define(
+  'order',
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'users',
+        key: 'id',
+      },
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    phone: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    totalPrice: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+  }
+)
+
+const OrderProduct = sequelize.define('OrderProduct', {
+  orderId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+          model: 'orders',
+          key: 'id',
+      },
+  },
+  productId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+          model: 'products',
+          key: 'id',
+      },
+  },
+  quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+  },
+  totalPrice: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+  },
+}, {
+  timestamps: true,
+  tableName: 'order_products',
+});
+
 
 const ProductInfo = sequelize.define(
   'product_info',
@@ -211,6 +308,20 @@ Product.hasMany(BasketProduct)
 Category.hasMany(Product)
 Product.belongsTo(Category)
 
+Order.hasMany(OrderProduct)
+OrderProduct.belongsTo(Order)
+
+Product.hasMany(OrderProduct)
+OrderProduct.belongsTo(Product)
+
+Order.belongsTo(DeliveryMethod)
+
+Order.belongsTo(PaymentMethod)
 
 
-module.exports = {sequelize, Product, Basket, BasketProduct, Category, ProductInfo, Rating, User, Role}
+
+
+
+
+module.exports = {sequelize, Product, Basket, BasketProduct,  Category, ProductInfo,  Rating,  User, Role, Order, DeliveryMethod, PaymentMethod, OrderProduct,
+}

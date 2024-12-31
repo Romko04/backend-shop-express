@@ -1,20 +1,19 @@
 const { where } = require('sequelize');
-const { Basket, BasketProduct, Product } = require('../db');
+const { BasketProduct } = require('../db');
 const errorApi = require('../error/errorApi');
+
+const basketService = require('../services/basket');
 
 class CartController {
     async add(req, res, next) {
         try {
             const { productId } = req.params;
             const { quantity } = req.body;
-            const userId = req.user.id;
 
-            let basket = await Basket.findOne({ where: { userId } });
-            if (!basket) {
-                basket = await Basket.create({ userId });
-            }
+            let basket = req.basket;
 
             let basketProduct = await BasketProduct.findOne({ where: { basketId: basket.id, productId } });
+
             if (basketProduct) {
                 basketProduct.count += Number(quantity);
                 await basketProduct.save();
@@ -59,24 +58,13 @@ class CartController {
 
     async get(req, res, next) {
         try {
-            const userId = req.user.id;
 
-            const basket = await Basket.findOne({
-                where: { userId },
-                include: {
-                    model: BasketProduct,
-                    include: {
-                        model: Product,
-                        attributes: ['name', 'price', 'image']
-                    }
-                }
-            });
+            const basketId = req.basket.id
 
-            if (!basket) {
-                return next(errorApi.notFoundRequest('Basket not found'));
-            }
+            const BasketProducts = await basketService.getProducts(basketId);
 
-            res.json({ success: true, basket });
+            res.json({ success: true, BasketProducts });
+
         } catch (error) {
             next(errorApi.internalServerError(error.message));
         }

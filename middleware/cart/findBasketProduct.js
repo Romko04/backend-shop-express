@@ -1,7 +1,7 @@
 const { BasketProduct } = require('../../db');
 const errorApi = require('../../error/errorApi');
 
-const findBasketProduct = async (req, res, next) => {
+const findCartProduct = async (req, res, next) => {
     try {
         const { productId } = req.params;
         const basketId = req.basket.id;
@@ -19,4 +19,4 @@ const findBasketProduct = async (req, res, next) => {
     }
 };
 
-module.exports = findBasketProduct;
+module.exports = findCartProduct;

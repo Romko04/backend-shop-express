@@ -4,6 +4,7 @@ const brandRouter = require('./brand')
 const productRouter = require('./product')
 const userRouter = require('./user')
 const cartRouter = require('./cart')
+const orderRouter = require('./order')
 
 const checkAuth = require('../middleware/auth/checkAuth')
 const checkUserExists = require('../middleware/auth/checkUserExists')
@@ -16,6 +17,8 @@ router.use('/brands', brandRouter) // розділяю маршрути на ї�
 router.use('/product', productRouter) 
 router.use('/user', userRouter) 
 router.use('/cart', checkAuth, checkUserExists, findBasket, cartRouter);
+router.use('/order', checkAuth, checkUserExists, findBasket, orderRouter);
+
 
 
 
