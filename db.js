@@ -302,6 +302,14 @@ const Category = sequelize.define(
     name: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    parentId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'categories',
+        key: 'id',
+      },
     }
   }
 )
@@ -345,5 +353,5 @@ UserProductRating.belongsTo(Product)
 
 
 
-module.exports = {sequelize, UserProductRating, Basket, BasketProduct,  Category, ProductInfo,  Rating,  User, Role, Order, DeliveryMethod, PaymentMethod, OrderProduct,
+module.exports = {sequelize, UserProductRating, Basket, BasketProduct, Product, Category, ProductInfo,  Rating,  User, Role, Order, DeliveryMethod, PaymentMethod, OrderProduct,
 }

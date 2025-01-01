@@ -1,6 +1,6 @@
 const Router = require("express");
 const router = new Router()
-const brandRouter = require('./brand')
+const categoryRouter = require('./category')
 const productRouter = require('./product')
 const userRouter = require('./user')
 const cartRouter = require('./cart')
@@ -14,7 +14,7 @@ const findBasket = require('../middleware/cart/findBasket');
 
 
 
-router.use('/brands', brandRouter) // розділяю маршрути на їх логічні частини
+router.use('/category', categoryRouter) // розділяю маршрути на їх логічні частини
 router.use('/product', productRouter) 
 router.use('/user', userRouter) 
 router.use('/cart', checkAuth, checkUserExists, findBasket, cartRouter);

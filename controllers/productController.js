@@ -89,8 +89,11 @@ class ProductController {
     async updateProduct(req, res, next) {
         try {
             const { id } = req.params
-            const { name, price, rating, image: fileName, typeId, brandId } = req.body
-            const product = await Product.update({ name, price, rating, image: fileName, typeId, brandId }, { where: { id } })
+            let { name, price, image: fileName, categoryId } = req.body
+
+            categoryId = categoryId || 0; 
+            
+            const product = await Product.update({ name, price, image: fileName, categoryId }, { where: { id } })
             product
                 ? res.status(200).json({ succes: true })
                 : next(errorApi.notFoundRequest("Product not found"))
