@@ -264,7 +264,6 @@ const Rating = sequelize.define(
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
-      defaultValue: 0
     },
     rate: {
       type: DataTypes.INTEGER,
@@ -272,6 +271,25 @@ const Rating = sequelize.define(
     }
   }
 )
+
+const UserProductRating = sequelize.define(
+  'user_product_rating',
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    }
+  },
+  {
+    indexes: [
+      {
+        unique: true,
+        fields: ['userId', 'productId'],
+      },
+    ],
+  }
+);
 
 const Category = sequelize.define(
   'categories',
@@ -295,9 +313,6 @@ User.hasOne(UserRefreshToken)
 UserRefreshToken.belongsTo(User)
 
 
-User.hasMany(Rating)
-Rating.belongsTo(Rating)
-
 Basket.hasMany(BasketProduct)
 BasketProduct.belongsTo(Basket)
 
@@ -319,9 +334,16 @@ Order.belongsTo(DeliveryMethod)
 Order.belongsTo(PaymentMethod)
 
 
+User.hasMany(UserProductRating)
+UserProductRating.belongsTo(User)
+
+Rating.hasMany(UserProductRating)
+UserProductRating.belongsTo(Rating)
+
+Product.hasMany(UserProductRating)
+UserProductRating.belongsTo(Product)
 
 
 
-
-module.exports = {sequelize, Product, Basket, BasketProduct,  Category, ProductInfo,  Rating,  User, Role, Order, DeliveryMethod, PaymentMethod, OrderProduct,
+module.exports = {sequelize, UserProductRating, Basket, BasketProduct,  Category, ProductInfo,  Rating,  User, Role, Order, DeliveryMethod, PaymentMethod, OrderProduct,
 }
